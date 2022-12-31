@@ -1,0 +1,29 @@
+{% extends "polls/base_template.html" %}
+
+
+
+{% block content %}
+    {% if user.is_authenticated %}
+
+    
+        <form action="{% url 'polls:vote' question.id %}" method="post" style="margin-bottom: 20px;">
+            {% csrf_token %}
+            <fieldset>
+                <legend><h1>{{ question.question_text }}</h1></legend>
+                {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+                {% for choice in question.choice_set.all %}
+                    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+                    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+                {% endfor %}
+            </fieldset>
+            <input type="submit" value="Vote">
+        </form>
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">Log In</a>
+    {% endif %}
+
+
+    
+{% endblock %}
+

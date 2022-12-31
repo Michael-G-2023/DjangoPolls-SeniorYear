@@ -1,0 +1,90 @@
+{% extends "polls/base_template.html" %}
+
+{% block title %} <span class="text-warning">Home page</span> {% endblock %}
+
+
+{% block description%} Questions of the day. Please choose a quesiton :){% endblock %}
+
+
+{% block content %}
+
+    {% if user.is_authenticated %}
+
+        <h3>Hi <span class="text-warning">{{ user.username }}</span>!</h3>
+        
+        
+
+        {% if latest_question_list %}
+
+            <p>Polls not yet voted on</p>
+
+            <table class="table table-dark table-hover">
+            
+                
+                {% for question in latest_question_list %}
+
+            
+                    {% if choice.response.choice == null%}
+                        <tr><td><a href="{% url 'polls:detail' question.id %}" style = "color: beige; text-decoration: none;">{{ question.question_text }}</a>
+                        </td></tr>
+                    {% endif %}
+
+                {% endfor %}
+
+            </table>
+        {% endif %} 
+
+            {% if latest_question_list %}
+
+            <p>Polls voted on: click to see results</p>
+
+            <table class="table table-dark table-hover">
+            
+                
+            {% for question in latest_question_list %}
+
+            
+            {% if choice.response.choice %}
+            <tr><td><a href="{% url 'polls:detail' question.id %}" style = "color: beige; text-decoration: none;">{{ question.question_text }}</a>
+            </td></tr>
+            {% endif %}
+
+            {% endfor %}
+            
+            </table>
+
+            {% if latest_question_list %}
+
+            <p>ALL POLLS</p>
+
+            <table class="table table-dark table-hover">
+            
+                
+            {% for question in latest_question_list %}
+
+            
+            <tr><td><a href="{% url 'polls:detail' question.id %}" style = "color: beige; text-decoration: none;">{{ question.question_text }}</a>
+            </td></tr>
+
+            {% endfor %}
+            
+            </table>
+
+            <p><a href="{% url 'logout' %}">Log Out</a></p>
+            
+            {% else %}
+                <p>No polls are available.</p>
+            {% endif %}
+
+        {% load static %}
+        
+        
+    {% else %}
+        <p>You are not logged in so you cannot access the polls :'(</p>
+        <a href="{% url 'login' %}">Log In</a>
+    {% endif %}
+
+    
+    
+
+{% endblock %}
